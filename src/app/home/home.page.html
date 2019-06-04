@@ -23,10 +23,10 @@
       </ion-card-content>
       <ion-item>
         <p slot="start">Nuevo movimiento:</p>
-        <ion-button color="danger" slot="end" (click)="addMovement(control.id, 'IN')">
+        <ion-button color="danger" slot="end" (click)="addMovement(control.id, 'OUT')">
             <ion-icon slot="icon-only" name="remove"></ion-icon>
         </ion-button>
-        <ion-button color="success" slot="end" (click)="addMovement(control.id, 'OUT')">
+        <ion-button color="success" slot="end" (click)="addMovement(control.id, 'IN')">
             <ion-icon slot="icon-only" name="add"></ion-icon>
         </ion-button>
       </ion-item>
