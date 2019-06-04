@@ -8,14 +8,14 @@
 
 <ion-content>
   <div id="ion-padding">
-    <ion-card *ngFor="let control of list_controlles" button="true" (click)="viewControl(control)">
+    <ion-card *ngFor="let control of list_controlles">
       <ion-item>
         <ion-card-title>{{control.title}}</ion-card-title>
         <div class="ion-padding-start" id="totalAmount">
           <ion-text *ngIf="control.totalAmount > 0" color="success">Total: {{control.totalAmount}}</ion-text>
           <ion-text *ngIf="control.totalAmount <= 0" color="danger">Total: {{control.totalAmount}}</ion-text>
         </div>
-        <ion-button fill="outline" slot="end">View</ion-button>
+        <ion-button fill="outline" slot="end" (click)="viewControl(control)">Movimientos</ion-button>
       </ion-item>
     
       <ion-card-content>
@@ -34,7 +34,7 @@
   </div>
   <!-- fab placed to the bottom end -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button href="add-control" routerDirection="forward">
+    <ion-fab-button (click)="addControl()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

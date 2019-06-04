@@ -53,4 +53,8 @@ export class HomePage {
     };
     this.navCtrl.navigateForward('add-movement', navigationExtras);
   }
+
+  public addControl(){
+    this.navCtrl.navigateForward('add-control');
+  }
 }
