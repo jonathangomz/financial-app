@@ -6,7 +6,7 @@
       <div>
         <ion-title>{{control.title}}</ion-title>
         <ion-text *ngIf="TOTAL > 0" color="success">{{TOTAL}}</ion-text>
-        <ion-text *ngIf="TOTAL < 0" color="danger">{{TOTAL}}</ion-text>
+        <ion-text *ngIf="TOTAL <= 0" color="danger">{{TOTAL}}</ion-text>
       </div>
   </ion-toolbar>
 </ion-header>
@@ -23,8 +23,8 @@
         <ion-text color="primary">
           <h3>{{movement.description}}</h3>
         </ion-text>
-        <ion-text *ngIf="movement.totalAmount > 0" color="success">{{movement.totalAmount}}</ion-text>
-        <ion-text *ngIf="movement.totalAmount < 0" color="danger">{{movement.totalAmount}}</ion-text>
+        <ion-text *ngIf="movement.amount > 0" color="success">{{movement.amount}}</ion-text>
+        <ion-text *ngIf="movement.amount <= 0" color="danger">{{movement.amount}}</ion-text>
         <ion-text color="secondary">
           <p>{{movement.date}}</p>
         </ion-text>

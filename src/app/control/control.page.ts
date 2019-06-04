@@ -24,7 +24,7 @@ export class ControlPage implements OnInit {
       this.control_id = params["id"];
       storageService.getMovementsById(this.control_id).then(list => {
           if(list){
-            this.list_movements = list
+            this.list_movements = list;
           }
           return list;
         }).then(list => {
