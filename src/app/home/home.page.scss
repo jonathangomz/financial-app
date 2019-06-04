@@ -1,0 +1,14 @@
+ion-card{
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+ion-content ion-card{
+  width: 100%;
+}
+#totalAmount {
+  
+  ion-text{
+    font-size: 0.7em;
+  }
+}

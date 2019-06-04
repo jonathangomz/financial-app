@@ -1,0 +1,48 @@
+<ion-header *ngIf="control">
+  <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button color="primary" defaultHref="home"></ion-back-button>
+      </ion-buttons>
+      <div>
+        <ion-title>{{control.title}}</ion-title>
+        <ion-text *ngIf="TOTAL > 0" color="success">{{TOTAL}}</ion-text>
+        <ion-text *ngIf="TOTAL < 0" color="danger">{{TOTAL}}</ion-text>
+      </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content *ngIf="control">
+  <ion-fab vertical="top" horizontal="end" edge slot="fixed">
+    <ion-fab-button size="small">
+      <ion-icon name="create"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list>
+    <ion-item *ngFor="let movement of list_movements" detail>
+      <ion-label text-wrap>
+        <ion-text color="primary">
+          <h3>{{movement.description}}</h3>
+        </ion-text>
+        <ion-text *ngIf="movement.totalAmount > 0" color="success">{{movement.totalAmount}}</ion-text>
+        <ion-text *ngIf="movement.totalAmount < 0" color="danger">{{movement.totalAmount}}</ion-text>
+        <ion-text color="secondary">
+          <p>{{movement.date}}</p>
+        </ion-text>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="success" (click)="addMovement(control.id, 'IN')"><ion-icon name="add"></ion-icon></ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="start">
+      <ion-fab-button color="danger" (click)="addMovement(control.id, 'OUT')">
+        <ion-icon name="remove"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

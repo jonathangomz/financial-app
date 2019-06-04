@@ -1,0 +1,7 @@
+{
+  "name": "Ctrl",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

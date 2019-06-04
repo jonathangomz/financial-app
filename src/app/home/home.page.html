@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Controles
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="ion-padding">
+    <ion-card *ngFor="let control of list_controlles" button="true" (click)="viewControl(control)">
+      <ion-item>
+        <ion-card-title>{{control.title}}</ion-card-title>
+        <div class="ion-padding-start" id="totalAmount">
+          <ion-text *ngIf="control.totalAmount > 0" color="success">Total: {{control.totalAmount}}</ion-text>
+          <ion-text *ngIf="control.totalAmount <= 0" color="danger">Total: {{control.totalAmount}}</ion-text>
+        </div>
+        <ion-button fill="outline" slot="end">View</ion-button>
+      </ion-item>
+    
+      <ion-card-content>
+        {{control.content}}
+      </ion-card-content>
+      <ion-item>
+        <p slot="start">Nuevo movimiento:</p>
+        <ion-button color="danger" slot="end" (click)="addMovement(control.id, 'IN')">
+            <ion-icon slot="icon-only" name="remove"></ion-icon>
+        </ion-button>
+        <ion-button color="success" slot="end" (click)="addMovement(control.id, 'OUT')">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </div>
+  <!-- fab placed to the bottom end -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button href="add-control" routerDirection="forward">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
