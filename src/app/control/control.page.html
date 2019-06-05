@@ -5,8 +5,8 @@
       </ion-buttons>
       <div>
         <ion-title>{{control.title}}</ion-title>
-        <ion-text *ngIf="TOTAL > 0" color="success">{{TOTAL}}</ion-text>
-        <ion-text *ngIf="TOTAL <= 0" color="danger">{{TOTAL}}</ion-text>
+        <ion-text *ngIf="control.totalAmount > 0" color="success">{{control.totalAmount}}</ion-text>
+        <ion-text *ngIf="control.totalAmount <= 0" color="danger">{{control.totalAmount}}</ion-text>
       </div>
   </ion-toolbar>
 </ion-header>

@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { StorageService, Control } from '../services/storage.service';
 import { NavController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -11,25 +12,17 @@ import { NavigationExtras } from '@angular/router';
 })
 export class HomePage {
 
-  card_testbed:Control = {
-    id:'12345678',
-    title: 'Card Title',
-    content:`Keep close to Nature's heart... and break clear away, once in awhile,
-    and climb a mountain or spend a week in the woods. Wash your spirit clean.`,
-    totalAmount: 0
-  };
-
   list_controlles:Control[] = [];
 
   constructor(
     private storageService: StorageService,
     private navCtrl: NavController,
-    private storage: Storage
+    private storage: Storage,
+    private route: ActivatedRoute
   ) {
-    storageService.getControlles().then(controlles => {
-      if(controlles){
-        this.list_controlles = controlles;
-      }
+    storage.clear();
+    this.route.queryParams.subscribe(async params => {
+      this.list_controlles = await storageService.getControlles();
     });
   }
 

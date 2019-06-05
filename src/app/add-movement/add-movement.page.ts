@@ -55,7 +55,7 @@ export class AddMovementPage implements OnInit {
       this.newMovement.amount = +form.value['amount'];
     }
     
-    await this.loaderToShow.present()
+    await this.loaderToShow.present();
     await this.storageService.addMovement(this.newMovement);
     await this.loaderToShow.dismiss();
 
