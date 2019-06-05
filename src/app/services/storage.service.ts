@@ -16,13 +16,6 @@ export interface Movement {
   amount: number
 }
 
-export interface Item {
-  id: string,
-  title: string,
-  content: string
-}
-
-const ITEMS_KEY = 'my-items';
 const CONTROLLES_KEY = 'controlles';
 const MOVEMENTS_KEY = 'movements';
 
@@ -79,9 +72,6 @@ export class StorageService {
   }
 
   // READ
-  getItems(): Promise<Item[]> {
-    return this.storage.get(ITEMS_KEY);
-  }
   getControlles(): Promise<Control[]> {
     return this.storage.get(CONTROLLES_KEY);
   }
