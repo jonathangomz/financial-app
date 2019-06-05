@@ -23,6 +23,10 @@
               <ion-label color="primary" position="stacked">Cantidad</ion-label>
               <ion-input type="number" name="amount" placeholder="Ingresa la cantidad" ngModel required></ion-input>
             </ion-item>
+            <ion-item>
+              <ion-label color="primary" position="stacked">Fecha</ion-label>
+              <ion-datetime displayFormat="DDDD, DD/MMMM/YYYY" pickerFormat="DD MMMM YYYY" [(ngModel)]="today" name="date" required></ion-datetime>
+            </ion-item>
           </div>
           <div padding>
             <ion-button  size="default" type="submit" [disabled]="form.invalid" expand="block">Crear</ion-button>

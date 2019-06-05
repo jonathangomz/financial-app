@@ -12,6 +12,7 @@ import { NavController, LoadingController } from '@ionic/angular';
 export class AddMovementPage implements OnInit {
 
   masks:any;
+  public today:string = new Date().toISOString();
   public control_id:string = null;
   public type:string = null;
   public wordType:string = null;
@@ -47,7 +48,7 @@ export class AddMovementPage implements OnInit {
     
     this.newMovement.id = hash.toString();
     this.newMovement.id_control = this.control_id;
-    this.newMovement.date = new Date();
+    this.newMovement.date = form.value["date"];
     this.newMovement.description = form.value['description'];
     if(this.type !== 'IN') {
       this.newMovement.amount = -form.value['amount'];
