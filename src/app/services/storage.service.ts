@@ -45,12 +45,30 @@ export class StorageService {
     });
   }
   addMovement(movement:Movement): Promise<any>{
-    return this.storage.get(MOVEMENTS_KEY).then((movements: Movement[]) => {
+    return this.storage.get(MOVEMENTS_KEY).then(async (movements: Movement[]) => {
       if (movements) {
         movements.push(movement);
-        return this.storage.set(MOVEMENTS_KEY, movements);
       } else {
-        return this.storage.set(MOVEMENTS_KEY, [movement]);
+        movements = [movement];
+      }
+
+      try {
+        let movement_result:Movement[] = await this.storage.set(MOVEMENTS_KEY, movements);
+        let controlles:Control[] = await this.storage.get(CONTROLLES_KEY);
+        let tmp_control:Control = <Control>{};
+
+        controlles.forEach(ctrl => {
+          if(ctrl.id === movement.id_control){
+            tmp_control = ctrl;
+            tmp_control.totalAmount += movement.amount;
+          }
+        });
+
+        await this.updateControl(tmp_control);
+
+        return movement_result;
+      } catch (error) {
+        console.error(error);
       }
     });
   }
@@ -65,7 +83,7 @@ export class StorageService {
   getControl(id:string): Promise<Control>{
     let controlToReturn:Control = null;
 
-    return this.storage.get(CONTROLLES_KEY).then(controllers => {
+    return this.storage.get(CONTROLLES_KEY).then((controllers: Control[]) => {
       if(controllers){
         for(let control of controllers){
           if(control.id === id){
@@ -80,7 +98,7 @@ export class StorageService {
 
   getMovementsById(id:string): Promise<Movement[]>{
     let list_movements:Movement[] = [];
-    return this.storage.get(MOVEMENTS_KEY).then(movements => {
+    return this.storage.get(MOVEMENTS_KEY).then((movements: Movement[]) => {
       if(movements){
         for(let movement of movements){
           if(movement.id_control === id){
@@ -90,27 +108,26 @@ export class StorageService {
       }
       return list_movements;
     });
-
   }
 
   // UPDATE
-  updateItem(item: Item): Promise<any> {
-    return this.storage.get(ITEMS_KEY).then((items: Item[]) => {
-      if (!items || items.length === 0) {
+  updateControl(control: Control): Promise<any> {
+    return this.storage.get(CONTROLLES_KEY).then((controllers: Control[]) => {
+      if (!controllers || controllers.length === 0) {
         return null;
       }
 
-      let newItems: Item[] = [];
+      let newControl: Control[] = [];
 
-      for (let i of items) {
-        if (i.id === item.id) {
-          newItems.push(item);
+      for (let c of controllers) {
+        if (c.id === control.id) {
+          newControl.push(control);
         } else {
-          newItems.push(i);
+          newControl.push(c);
         }
       }
 
-      return this.storage.set(ITEMS_KEY, newItems);
+      return this.storage.set(CONTROLLES_KEY, newControl);
     });
   }
 

@@ -20,18 +20,10 @@ export class ControlPage implements OnInit {
     private navCtrl: NavController,
     private storageService: StorageService
   ) { 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       this.control_id = params["id"];
-      storageService.getMovementsById(this.control_id).then(list => {
-          if(list){
-            this.list_movements = list;
-          }
-          return list;
-        }).then(list => {
-          if(list.length !== 0){
-            this.TOTAL = list.map(item => item.amount).reduce((sum, current) => sum + current);
-          }
-        });
+      this.list_movements = await storageService.getMovementsById(this.control_id);
+      this.control = await storageService.getControl(this.control_id);
     });
     
   }
