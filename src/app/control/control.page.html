@@ -13,12 +13,22 @@
 <ion-content *ngIf="control">
   <ion-fab vertical="top" horizontal="end" edge slot="fixed">
     <ion-fab-button size="small">
-      <ion-icon name="create"></ion-icon>
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
+    <ion-fab-list side="start">
+      <ion-fab-button size="small" color="success" (click)="updateControl()">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="buttom">
+      <ion-fab-button color="danger" (click)="delete()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
 
   <ion-list>
-    <ion-item *ngFor="let movement of list_movements" detail>
+    <ion-item *ngFor="let movement of list_movements" detail (click)="updateMovement(movement.id, 'UPDATE')">
       <ion-label text-wrap>
         <ion-text color="primary">
           <h3>{{movement.description}}</h3>
@@ -37,10 +47,10 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="success" (click)="addMovement(control.id, 'IN')"><ion-icon name="add"></ion-icon></ion-fab-button>
+      <ion-fab-button color="success" (click)="addMovement('IN')"><ion-icon name="add"></ion-icon></ion-fab-button>
     </ion-fab-list>
     <ion-fab-list side="start">
-      <ion-fab-button color="danger" (click)="addMovement(control.id, 'OUT')">
+      <ion-fab-button color="danger" (click)="addMovement('OUT')">
         <ion-icon name="remove"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

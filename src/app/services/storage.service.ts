@@ -54,23 +54,28 @@ export class StorageService {
 
       try {
         let movement_result:Movement[] = await this.storage.set(MOVEMENTS_KEY, movements);
-        let controlles:Control[] = await this.storage.get(CONTROLLES_KEY);
-        let tmp_control:Control = <Control>{};
 
-        controlles.forEach(ctrl => {
-          if(ctrl.id === movement.id_control){
-            tmp_control = ctrl;
-            tmp_control.totalAmount += movement.amount;
-          }
-        });
-
-        await this.updateControl(tmp_control);
+        await this.updateTotalControl(movement);
 
         return movement_result;
       } catch (error) {
         console.error(error);
       }
     });
+  }
+
+  async updateTotalControl(movement: Movement): Promise<any>{
+    let controlles:Control[] = await this.storage.get(CONTROLLES_KEY);
+    let tmp_control:Control = <Control>{};
+
+    controlles.forEach(ctrl => {
+      if(ctrl.id === movement.id_control){
+        tmp_control = ctrl;
+        tmp_control.totalAmount += movement.amount;
+      }
+    });
+
+    await this.updateControl(tmp_control);
   }
 
   // READ
@@ -93,6 +98,22 @@ export class StorageService {
         }
       }
       return controlToReturn;
+    });
+  }
+  getMovement(id:string): Promise<Movement>{
+    let movementToReturn:Movement = null;
+
+    return this.storage.get(MOVEMENTS_KEY).then((movements: Movement[]) => {
+      if(movements){
+        for(let movement of movements){
+          if(movement.id === id){
+            movementToReturn = movement;
+            break;
+          }
+        }
+      }
+
+      return movementToReturn;
     });
   }
 
@@ -130,22 +151,93 @@ export class StorageService {
       return this.storage.set(CONTROLLES_KEY, newControl);
     });
   }
-
-  // DELETE
-  deleteItem(id: string): Promise<Item> {
-    return this.storage.get(ITEMS_KEY).then((items: Item[]) => {
-      if (!items || items.length === 0) {
+  updateMovement(movement: Movement): Promise<any> {
+    return this.storage.get(MOVEMENTS_KEY).then((movements: Movement[]) => {
+      if (!movements || movements.length === 0) {
         return null;
       }
 
-      let toKeep: Item[] = [];
+      let newMovement: Movement[] = [];
 
-      for (let i of items) {
-        if (i.id !== id) {
-          toKeep.push(i);
+      for (let m of movements) {
+        if (m.id === movement.id) {
+          newMovement.push(movement);
+        } else {
+          newMovement.push(m);
         }
       }
-      return this.storage.set(ITEMS_KEY, toKeep);
+
+      return this.storage.set(MOVEMENTS_KEY, newMovement).then(() => {
+        this.updateTotalControl(movement);
+      });
+    });
+  }
+
+  // DELETE
+  deleteControl(id: string): Promise<Control> {
+    return this.storage.get(CONTROLLES_KEY).then((controlles: Control[]) => {
+      if (!controlles || controlles.length === 0) {
+        return null;
+      }
+
+      let toKeep: Control[] = [];
+      let control_deleted:Control = <Control>{};
+      for (let c of controlles) {
+        if (c.id !== id) {
+          toKeep.push(c);
+        }else{
+          control_deleted = c;
+        }
+      }
+      this.storage.set(CONTROLLES_KEY, toKeep).then(() => {
+        this.deleteMovementsByControl(id);
+      });
+
+
+      return control_deleted;
+    });
+  }
+
+  // DELETE
+  deleteMovement(id: string): Promise<Movement> {
+    return this.storage.get(MOVEMENTS_KEY).then(async (movements: Movement[]) => {
+      if (!movements || movements.length === 0) {
+        return null;
+      }
+
+      let toKeep: Movement[] = [];
+      let movement_deleted:Movement = <Movement>{};
+      for (let m of movements) {
+        if (m.id !== id) {
+          toKeep.push(m);
+        }else{
+          movement_deleted = m;
+        }
+      }
+      await this.storage.set(MOVEMENTS_KEY, toKeep);
+      return movement_deleted;
+    });
+  }
+
+  // DELETE
+  deleteMovementsByControl(control_id: string): Promise<any> {
+    return this.storage.get(MOVEMENTS_KEY).then(async (movements: Movement[]) => {
+      if (!movements || movements.length === 0) {
+        return null;
+      }
+
+      let toKeep: Movement[] = [];
+      let movements_deleted:Movement[] = [];
+      for (let m of movements) {
+        if (m.id_control !== control_id) {
+          toKeep.push(m);
+        }else{
+          movements_deleted.push(m);
+        }
+      }
+      await this.storage.set(MOVEMENTS_KEY, toKeep);
+
+      return movements_deleted;
     });
   }
 }

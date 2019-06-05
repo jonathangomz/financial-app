@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { StorageService, Control } from '../services/storage.service';
 import { NavController } from '@ionic/angular';
-import { NavigationExtras } from '@angular/router';
-import { ActivatedRoute } from "@angular/router";
+import { NavigationExtras, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +47,11 @@ export class HomePage {
   }
 
   public addControl(){
-    this.navCtrl.navigateForward('add-control');
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        type:'NEW'
+      }
+    };
+    this.navCtrl.navigateForward('add-control', navigationExtras);
   }
 }
