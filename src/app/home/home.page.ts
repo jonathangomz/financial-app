@@ -20,7 +20,7 @@ export class HomePage {
     private storage: Storage,
     private route: ActivatedRoute
   ) {
-    storage.clear();
+    //storage.clear();
     this.route.queryParams.subscribe(async params => {
       this.list_controlles = await storageService.getControlles();
     });
