@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService, Movement } from '../services/storage.service';
 import { Md5 } from 'ts-md5/dist/md5';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -16,10 +16,11 @@ export class AddMovementPage implements OnInit {
   public movement:Movement = <Movement>{};
 
   private loaderToShow: HTMLIonLoadingElement;
+  private alert:HTMLIonAlertElement;
   public today:string = new Date().toISOString();
   public type:string;
   public control_id:string;
-  titleTemplate:string = 'Argega una nueva';
+  titleTemplate:string = 'Agrega una nueva';
   buttonTemplate:string = 'CREAR';
   public wordType;
   masks:any;
@@ -28,7 +29,8 @@ export class AddMovementPage implements OnInit {
     private route: ActivatedRoute,
     private navCtrl: NavController,
     private storageService: StorageService,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    public alertController: AlertController
   ) { 
     this.route.queryParams.subscribe(async params => {
       this.control_id = params["id"];
@@ -47,7 +49,7 @@ export class AddMovementPage implements OnInit {
         if(this.movement.amount >= 0){
           this.type += "-IN";
         } else {
-          this.type += "OUT";
+          this.type += "-OUT";
           this.movement.amount = Math.abs(this.movement.amount);
         }
       }
@@ -93,4 +95,28 @@ export class AddMovementPage implements OnInit {
     this.navCtrl.back();
   }
 
+  async delete(){
+    this.alert = await this.alertController.create({
+      header: 'Eliminar Movimiento',
+      message: '¿Está seguro que desea eliminar el movimiento? No de podrán recuperar los datos.',
+      cssClass:'alert-delete',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'btn-cancel'
+        }, {
+          text: 'Aceptar',
+          cssClass: 'btn-delete',
+          handler: async () => {
+            await this.loaderToShow.present();
+            this.storageService.deleteMovement(this.movement.id);
+            await this.loaderToShow.dismiss();
+            this.navCtrl.back();
+          }
+        }
+      ]
+    });
+    this.alert.present();
+  }
 }

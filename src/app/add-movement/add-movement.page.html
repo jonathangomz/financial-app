@@ -12,8 +12,8 @@
       <ion-row color="primary" justify-content-center>
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
           <div text-center>
-            <h3 *ngIf="type === 'UPDATE'">{{titleTemplate}}</h3>
-            <h3 *ngIf="type !== 'UPDATE'">Agregar nueva {{wordType}}</h3>
+            <h3 *ngIf="type.includes('UPDATE')">{{titleTemplate}}</h3>
+            <h3 *ngIf="!type.includes('UPDATE')">Agregar nueva {{wordType}}</h3>
           </div>
           <div padding>
             <ion-item>
@@ -30,7 +30,14 @@
             </ion-item>
           </div>
           <div padding>
-            <ion-button  size="default" type="submit" [disabled]="form.invalid" expand="block">{{buttonTemplate}}</ion-button>
+            <ion-button  size="default" type="submit" [disabled]="form.invalid" expand="block">
+              {{buttonTemplate}}
+            </ion-button>
+          </div>
+          <div padding>
+            <ion-button  *ngIf="type.includes('UPDATE')" size="default" (click)="delete()" [disabled]="form.invalid" expand="block" color="danger">
+              Eliminar
+            </ion-button>
           </div>
         </ion-col>
       </ion-row>

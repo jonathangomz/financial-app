@@ -27,7 +27,7 @@ export class StorageService {
   constructor(private storage: Storage) { }
 
   // CREATE
-  addControl(control: Control): Promise<any> {
+  addControl(control: Control): Promise<Control[]> {
     return this.storage.get(CONTROLLES_KEY).then((controlles: Control[]) => {
       if (controlles) {
         controlles.push(control);
@@ -37,7 +37,7 @@ export class StorageService {
       }
     });
   }
-  addMovement(movement:Movement): Promise<any>{
+  addMovement(movement:Movement): Promise<Movement[]>{
     return this.storage.get(MOVEMENTS_KEY).then(async (movements: Movement[]) => {
       if (movements) {
         movements.push(movement);
@@ -57,14 +57,14 @@ export class StorageService {
     });
   }
 
-  async updateTotalControl(movement: Movement): Promise<any>{
+  async updateTotalControl(movement: Movement, movementDeleting:boolean = false): Promise<any>{
     let controlles:Control[] = await this.storage.get(CONTROLLES_KEY);
     let tmp_control:Control = <Control>{};
 
     controlles.forEach(ctrl => {
       if(ctrl.id === movement.id_control){
         tmp_control = ctrl;
-        tmp_control.totalAmount += movement.amount;
+        tmp_control.totalAmount += movementDeleting ? -movement.amount : movement.amount;
       }
     });
 
@@ -179,10 +179,10 @@ export class StorageService {
           control_deleted = c;
         }
       }
+
       this.storage.set(CONTROLLES_KEY, toKeep).then(() => {
         this.deleteMovementsByControl(id);
       });
-
 
       return control_deleted;
     });
@@ -204,7 +204,11 @@ export class StorageService {
           movement_deleted = m;
         }
       }
-      await this.storage.set(MOVEMENTS_KEY, toKeep);
+
+      await this.storage.set(MOVEMENTS_KEY, toKeep).then(() => {
+        this.updateTotalControl(movement_deleted, true);
+      });
+
       return movement_deleted;
     });
   }
