@@ -72,10 +72,10 @@ export class AddMovementPage implements OnInit {
     if(this.type.includes('UPDATE')){
       this.newMovement.id = this.movement.id;
       if(this.type.includes('IN')){
-        this.newMovement.amount = +form.value['amount'];
+        this.newMovement.amount = Math.abs(form.value['amount']);
       }
       else if(this.type.includes('OUT')){
-        this.newMovement.amount = -form.value['amount'];
+        this.newMovement.amount = -Math.abs(form.value['amount']);
       }
       await this.storageService.updateMovement(this.newMovement);
     } else {
