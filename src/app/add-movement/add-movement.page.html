@@ -18,16 +18,24 @@
           <div padding>
             <ion-item>
               <ion-label color="primary" position="stacked">Descripción de la {{wordType}}</ion-label>
-              <ion-input type="text" name="description" placeholder="Ingresa una descripción" [(ngModel)]="movement.description" required></ion-input>
+              <ion-input name="description" type="text" placeholder="Ingresa una descripción" [(ngModel)]="movement.description" required></ion-input>
             </ion-item>
             <ion-item>
               <ion-label color="primary" position="stacked">Cantidad</ion-label>
-              <ion-input type="number" name="amount" placeholder="Ingresa la cantidad" [(ngModel)]="movement.amount" required></ion-input>
+              <ion-input name="amount" type="number" placeholder="Ingresa la cantidad" [(ngModel)]="movement.amount" required></ion-input>
             </ion-item>
             <ion-item>
               <ion-label color="primary" position="stacked">Fecha</ion-label>
-              <ion-datetime displayFormat="DDDD, DD/MMMM/YYYY" pickerFormat="DD MMMM YYYY" [(ngModel)]="today" name="date" required></ion-datetime>
+              <ion-datetime name="date" displayFormat="DDDD, DD/MMMM/YYYY" pickerFormat="DD MMMM YYYY" [(ngModel)]="today" required></ion-datetime>
             </ion-item>
+            <div id="toggle-item">
+              <ion-text class="label-toggle-mode" id="out">Salida</ion-text>
+              <label class="switch">
+                <input name="isEntry" [(ngModel)]="isEntry" type="checkbox">
+                <span class="slider round"></span>
+              </label>
+              <ion-text class="label-toggle-mode" id="in">Entrada</ion-text>
+            </div>
           </div>
           <div padding>
             <ion-button  size="default" type="submit" [disabled]="form.invalid" expand="block">

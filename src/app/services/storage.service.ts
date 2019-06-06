@@ -13,7 +13,8 @@ export interface Movement {
   id_control:string,
   description: string,
   date:Date,
-  amount: number
+  amount: number,
+  isEntry: boolean
 }
 
 const CONTROLLES_KEY = 'controlles';
@@ -57,14 +58,14 @@ export class StorageService {
     });
   }
 
-  async updateTotalControl(movement: Movement, movementDeleting:boolean = false): Promise<any>{
+  async updateTotalControl(movement: Movement, movementDeleting:boolean = false, changedMode:boolean = false): Promise<any>{
     let controlles:Control[] = await this.storage.get(CONTROLLES_KEY);
     let tmp_control:Control = <Control>{};
 
     controlles.forEach(ctrl => {
       if(ctrl.id === movement.id_control){
         tmp_control = ctrl;
-        tmp_control.totalAmount += movementDeleting ? -movement.amount : movement.amount;
+        tmp_control.totalAmount += movementDeleting ? -movement.amount : changedMode  ? movement.amount*2 : movement.amount;
       }
     });
 
@@ -146,19 +147,22 @@ export class StorageService {
       if (!movements || movements.length === 0) {
         return null;
       }
-
+      let changedMode: boolean = false;
       let newMovement: Movement[] = [];
 
       for (let m of movements) {
         if (m.id === movement.id) {
           newMovement.push(movement);
+          if(m.isEntry !== movement.isEntry){
+            changedMode = true;
+          }
         } else {
           newMovement.push(m);
         }
       }
 
       return this.storage.set(MOVEMENTS_KEY, newMovement).then(() => {
-        this.updateTotalControl(movement);
+        this.updateTotalControl(movement, false, changedMode);
       });
     });
   }
