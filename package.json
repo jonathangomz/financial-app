@@ -59,7 +59,7 @@
     "tslint": "~5.17.0",
     "typescript": "~3.1.6"
   },
-  "description": "An Ionic project",
+  "description": "An Ioni's project",
   "cordova": {
     "plugins": {
       "cordova-sqlite-storage": {}
